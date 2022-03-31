@@ -96,8 +96,9 @@ equals.addEventListener("click", () =>{ // waktu = di klik
         default: //kasus selain yang di atas
             return;
     }
+    prevNumb = result; //biar hasil perhitungan bisa dijumlahkan lagi
     updateScreen(result); //update screen bawah , hasil perhitungan di tampilkan di screen bawah
-    clearAll(); //reset kalo perhitungan beres
+    updateScreenTop("");
 })
 
 const clearAll = () =>{
@@ -108,6 +109,7 @@ const clearAll = () =>{
 }
 
 allClear.addEventListener("click", () =>{ //waktu button AC di klik
+    // ngapus / reset semua
     clearAll();
     updateScreen(currentNumb);
     updateScreenTop(currentNumb);
@@ -115,5 +117,5 @@ allClear.addEventListener("click", () =>{ //waktu button AC di klik
 
 backspace.addEventListener("click", () => { //waktu button backspace di klik
         currentNumb = currentNumb.slice(0, currentNumb.length - 1);  //nomer yang lg di masukkan bisa di hapus satu persatu dr belakang , slice(start, end)
-        screen.value = screen.value.slice(0, screen.value.length - 1); //tulisan yg di screen bawah jg ikut di hapus satu persatu dr belakang
+        updateScreen(currentNumb);
 })
