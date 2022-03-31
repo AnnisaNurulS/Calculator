@@ -78,7 +78,6 @@ let inputOperator = (input) =>{
 }
 
 equals.addEventListener("click", () =>{ // waktu = di klik
-    updateScreenTop(`${prevNumb} ${mathOperators} ${currentNumb}`); //menampilkan prevNumb , mathOperators, currentNumb di screen atas , contoh tampilan => 2 + 3
     let result = ""; //wadah hasil perhitungan
     switch (mathOperators) {
         case "+": //kasus ketika + yg di klik
