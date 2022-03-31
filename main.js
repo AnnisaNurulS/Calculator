@@ -28,6 +28,7 @@ numbers.forEach((number) =>{ // memanggil nomer dalam const numbers yang berbent
     number.addEventListener("click", (numbEvent) => { //waktu button nomer di klik
         inputNumber(numbEvent.target.value); // value button class number di HTML menjadi input pada inputNumber
         updateScreen(currentNumb); // menampilkan angka baru ke screen bawah
+        console.log(currentNumb);
     })
 })
 
@@ -96,15 +97,20 @@ equals.addEventListener("click", () =>{ // waktu = di klik
             return;
     }
     updateScreen(result); //update screen bawah , hasil perhitungan di tampilkan di screen bawah
+    clearAll(); //reset kalo perhitungan beres
 })
 
-allClear.addEventListener("click", () =>{ //waktu button AC di klik
+const clearAll = () =>{
     // semua nilai jd kosong / di hapus
     prevNumb = "";
     mathOperators = ""; 
     currentNumb = "";
-    screen.value = "";
-    screenTop.value = "";
+}
+
+allClear.addEventListener("click", () =>{ //waktu button AC di klik
+    clearAll();
+    updateScreen(currentNumb);
+    updateScreenTop(currentNumb);
 })
 
 backspace.addEventListener("click", () => { //waktu button backspace di klik
