@@ -11,7 +11,9 @@ const backspace = document.querySelector(".backspace");                 // untuk
 let currentNumb = "";           // untuk nomer baru
 let mathOperators = "";         // untuk symbol operasi matematika (+, -, x, /)
 let prevNumb = "";              // untuk nomer lama , (nyimpan nomer baru saat memasukan operasi mtk)
-let percentResult = "";         // untuk hasil persen
+let percentResult = "";
+
+// ================ Screen ===============================
 
 // menampilkan semua perhitungan di screen atas
 const updateScreenTop = (display) => {
@@ -23,12 +25,15 @@ const updateScreen = (display) => {
     screen.value = display;
 }
 
+// =========================================================
+
+//=======================Tombol Nomer========================
+
 // memasukan nomer
 numbers.forEach((number) =>{ // memanggil nomer dalam const numbers yang berbentuk array satu persatu
     number.addEventListener("click", (numbEvent) => { //waktu button nomer di klik
         inputNumber(numbEvent.target.value); // value button class number di HTML menjadi input pada inputNumber
         updateScreen(currentNumb); // menampilkan angka baru ke screen bawah
-        console.log(currentNumb);
     })
 })
 
@@ -41,6 +46,10 @@ let inputNumber = (input) =>{
     }
 }
 
+//===============================================================
+
+//=====================Tombol Decimal=============================
+
 decimal.addEventListener("click", (decimalEvent) => { // waktu button . di klik
     inputDecimal(decimalEvent.target.value); // value  button class decimal jadi point di inputDecimal
     updateScreen(currentNumb); //menampilkan angka baru ke screen bawah
@@ -50,6 +59,10 @@ let inputDecimal = (point) => {
     currentNumb += point; //angka dan koma tidak saling nimpa
 }
 
+//==================================================================
+
+//==================== Tombol Percent ===============================
+
 percent.addEventListener("click", (percentEvent) => { // waktu button % di klik
     inputPercent(percentEvent.target.value); // value button class percent jadi  input di inputDecimal
     updateScreen(currentNumb); //menampilkan angka baru ke screen bawah
@@ -57,14 +70,11 @@ percent.addEventListener("click", (percentEvent) => { // waktu button % di klik
 
 let inputPercent = (input) => {
     currentNumb += input;
-    if (prevNumb === ""){ // nilai sebelum belum ada , nilai baru dikali 0.01
-        percentResult = parseFloat(currentNumb)*0.01; 
-    }
-    else if(prevNumb !== ""){ // nilai sebelum udah ada -> nilai baru dikali 0.01 lalu dikali nilai sebelum
-        percentResult = (parseFloat(currentNumb)*0.01) * parseFloat(prevNumb);
-    }
-    currentNumb = percentResult;
 }
+
+//====================================================================
+
+//=================== Tombol Operator MTK ==============================
 
 operators.forEach((operator) =>{ // memanggil symbol mtk dalam const operators yang berbentuk array satu persatu
     operator.addEventListener("click", (operatorEvent) => { //saat button symbol mtk di klik
@@ -82,7 +92,42 @@ let inputOperator = (input) =>{
     currentNumb = ""; // nilai currentNumb kosong setelah memasukan operator mtk
 }
 
+//=========================================================================
+
+//==================== Mengolah Bilangan Berbentuk Persen atau Bukan ===============
+
+// Check bilangan pertama
+let percentForPrevNumb = () => {
+    let percentPrevNumb = prevNumb.split(""); //prevNumb dijadikan Array
+    const findPercentPrevNumb = percentPrevNumb.find((finds) => { //mencari array '%' di prevNumb
+        return finds === '%';
+    });
+    if(findPercentPrevNumb === '%'){ // jika ada % , nilai prevNumb diganti dengan nilai hasil rumus
+        percentResult = parseFloat(prevNumb)*0.01;
+        prevNumb = percentResult;
+    }
+}
+
+// Check bilangan ke dua
+let percentForCurrentNumb = () => {
+    let percentCurrentNumb = currentNumb.split("");
+    const findPercentCurrentNumb = percentCurrentNumb.find((finds) => {
+        return finds === '%';
+    });
+    if(findPercentCurrentNumb === '%'){
+        percentResult = parseFloat(prevNumb) * (parseFloat(currentNumb)*0.01);
+        currentNumb = percentResult;
+    }
+}
+
+//=====================================================================================
+
+//============================= Sama Dengan ========================================
 equals.addEventListener("click", () =>{ // waktu = di klik
+
+    percentForPrevNumb();
+    percentForCurrentNumb();
+    
     let result = ""; //wadah hasil perhitungan
     switch (mathOperators) {
         case "+": //kasus ketika + yg di klik
@@ -100,10 +145,14 @@ equals.addEventListener("click", () =>{ // waktu = di klik
         default: //kasus selain yang di atas
             return;
     }
-    prevNumb = result; //biar hasil perhitungan bisa dijumlahkan lagi
-    updateScreen(result); //update screen bawah , hasil perhitungan di tampilkan di screen bawah
+    prevNumb = result.toString(); //hasil perhitungan bisa dijumlahkan lagi , tipe data result di ubah ke string
+    updateScreen(prevNumb); //update screen bawah , hasil perhitungan di tampilkan di screen bawah
     updateScreenTop("");
 })
+
+//============================================================================
+
+//==================== Tombol Clear All ============================================
 
 const clearAll = () =>{
     // semua nilai jd kosong / di hapus
@@ -113,13 +162,19 @@ const clearAll = () =>{
 }
 
 allClear.addEventListener("click", () =>{ //waktu button AC di klik
-    // ngapus / reset semua
+    // nilai dan yg di screen di hapus
     clearAll();
     updateScreen(currentNumb);
     updateScreenTop(currentNumb);
 })
 
+//======================================================================
+
+//==================== Tombol Backspace ==============================
+
 backspace.addEventListener("click", () => { //waktu button backspace di klik
         currentNumb = currentNumb.slice(0, currentNumb.length - 1);  //nomer yang lg di masukkan bisa di hapus satu persatu dr belakang , slice(start, end)
         updateScreen(currentNumb);
 })
+
+//========================================================================
