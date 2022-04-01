@@ -56,9 +56,14 @@ percent.addEventListener("click", (percentEvent) => { // waktu button % di klik
 })
 
 let inputPercent = (input) => {
-    currentNumb += input; // angka dan % gk saling nimpa
-    percentResult = 0.01 * parseFloat(currentNumb); // convert currentNumb dalam bentuk % ke decimal => 25% jadi 0.25
-    currentNumb = percentResult; // update currentNumb jadi bernilai decimal kaya percentResult
+    currentNumb += input;
+    if (prevNumb === ""){ // nilai sebelum belum ada , nilai baru dikali 0.01
+        percentResult = parseFloat(currentNumb)*0.01; 
+    }
+    else if(prevNumb !== ""){ // nilai sebelum udah ada -> nilai baru dikali 0.01 lalu dikali nilai sebelum
+        percentResult = (parseFloat(currentNumb)*0.01) * parseFloat(prevNumb);
+    }
+    currentNumb = percentResult;
 }
 
 operators.forEach((operator) =>{ // memanggil symbol mtk dalam const operators yang berbentuk array satu persatu
